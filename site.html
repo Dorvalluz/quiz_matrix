@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Redes</title>
+    <style>
+        body {
+            font-family: monospace;
+            text-align: center;
+            margin: 20px;
+            background-color: black;
+            color: #00ff00;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: #002200;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 255, 0, 0.5);
+        }
+        button {
+            display: block;
+            width: 80%;
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #004400;
+            color: #00ff00;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #008800;
+        }
+        .hidden {
+            display: none;
+        }
+        .matrix-animation {
+            width: 100%;
+            height: 300px;
+            background: black;
+            overflow: hidden;
+            position: relative;
+        }
+        .matrix-animation::before {
+            content: '0101010101010101010101010101';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            color: #00ff00;
+            font-size: 20px;
+            white-space: nowrap;
+            animation: matrixRain 5s linear infinite;
+        }
+        @keyframes matrixRain {
+            from {
+                transform: translateY(-100%);
+            }
+            to {
+                transform: translateY(100%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quiz sobre Redes - Elaborado por Dorval Luz</h1>
+        <p id="question"></p>
+        <div id="options"></div>
+        <button onclick="nextQuestion()">Próxima</button>
+        <p id="score" class="hidden"></p>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "O que significa a sigla IP?", options: ["Internet Protocol", "Internet Provider", "Internal Process"], answer: "Internet Protocol" },
+            { q: "Qual camada do modelo OSI é responsável pelo roteamento?", options: ["Física", "Rede", "Transporte"], answer: "Rede" },
+            { q: "Qual protocolo é usado para transferência de arquivos na internet?", options: ["HTTP", "FTP", "DNS"], answer: "FTP" }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            if (currentQuestion >= questions.length) {
+                document.body.innerHTML = '<div style="text-align: center; background: black; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #00ff00; font-family: monospace;"><h1>Quiz Finalizado!</h1><p>Pontuação final: ' + score + ' de ' + questions.length + '</p><div class="matrix-animation"></div><br><button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; background-color: #004400; color: #00ff00; border: none; border-radius: 5px; cursor: pointer;">Reiniciar Quiz</button></div>';
+                return;
+            }
+
+            const q = questions[currentQuestion];
+            document.getElementById("question").innerText = q.q;
+            document.getElementById("options").innerHTML = q.options.map(option => 
+                `<button onclick="checkAnswer('${option}')">${option}</button>`
+            ).join(" ");
+        }
+
+        function checkAnswer(answer) {
+            if (answer === questions[currentQuestion].answer) {
+                score++;
+            }
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function nextQuestion() {
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
